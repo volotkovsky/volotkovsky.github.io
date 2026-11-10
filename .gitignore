@@ -1,3 +1,18 @@
-raw_data/
+# LandWizard: private working files
+landwizard/docs/
+landwizard/qgis/
+
+# LandWizard: data downloads and build output (published through GitHub Releases)
+landwizard/data/raw/
+landwizard/data/out/
+landwizard/app/static/data/
 *.zip
-*.md
+
+# Node and build output
+node_modules/
+landwizard/app/build/
+landwizard/app/.svelte-kit/
+_site/
+
+# Visual Studio (Open Folder cache, per-user tasks and launch settings)
+.vs/

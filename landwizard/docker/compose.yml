@@ -1,0 +1,29 @@
+# LandWizard data build container. Started from landwizard/data with `npm run gis:up`.
+name: landwizard
+
+services:
+  gis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: landwizard-gis
+    environment:
+      # Local-only database for the data build; the port is bound to 127.0.0.1.
+      POSTGRES_USER: landwizard
+      POSTGRES_PASSWORD: landwizard
+      POSTGRES_DB: landwizard
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - ../data:/data
+      # PostgreSQL 18 images keep data under /var/lib/postgresql/<major>/docker.
+      - pgdata:/var/lib/postgresql
+    shm_size: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U landwizard -d landwizard"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  pgdata:
