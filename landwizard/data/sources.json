@@ -1,0 +1,89 @@
+[
+  {
+    "layer": "parcels",
+    "name": "NC OneMap statewide parcels, Halifax County Assessor (NC OneMap / CGIA)",
+    "url": "https://www.nconemap.gov/pages/parcels",
+    "downloaded": "2026-11-10",
+    "license": "No written release required (NC OneMap); not a survey document",
+    "updated": "2026-05-07"
+  },
+  {
+    "layer": "lines",
+    "name": "HIFLD Electric Power Transmission Lines (feature service)",
+    "url": "https://services1.arcgis.com/Hp6G80Pky0om7QvQ/arcgis/rest/services/Electric_Power_Transmission_Lines/FeatureServer/0",
+    "downloaded": "2026-11-11",
+    "license": "US government works (data.gov record); the HIFLD Open archive states no license",
+    "updated": "2023-09-05",
+    "note": "HIFLD Open was retired on 26 Aug 2025; the data is frozen at its last update"
+  },
+  {
+    "layer": "osm_lines",
+    "name": "OpenStreetMap power=line and minor_line (Overpass API)",
+    "url": "https://wiki.openstreetmap.org/wiki/Tag:power=line",
+    "downloaded": "2026-11-11",
+    "license": "© OpenStreetMap contributors, ODbL 1.0",
+    "updated": "2026-11-11",
+    "note": "Adds lines under 100 kV, which the HIFLD file leaves out; rural US coverage is uneven"
+  },
+  {
+    "layer": "substations",
+    "name": "OpenStreetMap power=substation (Overpass API)",
+    "url": "https://wiki.openstreetmap.org/wiki/Tag:power=substation",
+    "downloaded": "2026-11-11",
+    "license": "© OpenStreetMap contributors, ODbL 1.0",
+    "updated": "2026-11-11"
+  },
+  {
+    "layer": "flood",
+    "name": "FEMA National Flood Hazard Layer, Halifax County, NC (NFHL_37083C)",
+    "url": "https://msc.fema.gov/portal/downloadProduct?productID=NFHL_37083C",
+    "downloaded": "2026-11-11",
+    "license": "Public domain (FEMA); flood hazard area polygons"
+  },
+  {
+    "layer": "wetlands",
+    "name": "USFWS National Wetlands Inventory, NC state download",
+    "url": "https://documentst.ecosphere.fws.gov/wetlands/data/State-Downloads/NC_geopackage_wetlands.zip",
+    "downloaded": "2026-11-11",
+    "license": "Public domain (USFWS); not a jurisdictional wetland delineation"
+  },
+  {
+    "layer": "waterways",
+    "name": "OpenStreetMap waterway=river, stream, canal (Overpass API)",
+    "url": "https://wiki.openstreetmap.org/wiki/Key:waterway",
+    "downloaded": "2026-11-11",
+    "license": "© OpenStreetMap contributors, ODbL 1.0",
+    "updated": "2026-11-11"
+  },
+  {
+    "layer": "roads",
+    "name": "OpenStreetMap highway=* (Overpass API)",
+    "url": "https://wiki.openstreetmap.org/wiki/Key:highway",
+    "downloaded": "2026-11-11",
+    "license": "© OpenStreetMap contributors, ODbL 1.0",
+    "updated": "2026-11-11",
+    "note": "Many rural US roads come from the 2007 TIGER import and are unreviewed (tiger:reviewed=no)"
+  },
+  {
+    "layer": "elevation",
+    "name": "USGS 3D Elevation Program, 1 arc-second DEM",
+    "url": "https://www.usgs.gov/3d-elevation-program",
+    "downloaded": "2026-11-11",
+    "license": "Public domain (USGS)",
+    "note": "Tiles n37w079, n37w078, n37w077, n36w079, n36w078, n36w077"
+  },
+  {
+    "layer": "landcover",
+    "name": "USDA NASS Cropland Data Layer 2025, 30 m",
+    "url": "https://www.nass.usda.gov/Research_and_Science/Cropland/Release/",
+    "downloaded": "2026-11-11",
+    "license": "Public domain (USDA NASS), free to redistribute"
+  },
+  {
+    "layer": "counties",
+    "name": "US Census TIGER/Line 2025 counties",
+    "url": "https://www2.census.gov/geo/tiger/TIGER2025/COUNTY/tl_2025_us_county.zip",
+    "downloaded": "2026-11-11",
+    "license": "Public domain (US government work); used only to detect the county"
+  }
+]

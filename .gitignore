@@ -1,6 +1,7 @@
 # LandWizard: private working files
 landwizard/docs/
 landwizard/qgis/
+landwizard/docs_internal/
 
 # LandWizard: data downloads and build output (published through GitHub Releases)
 landwizard/data/raw/

@@ -127,3 +127,52 @@ export async function sql<R extends pg.QueryResultRow = pg.QueryResultRow>(text:
 export function ident(name: string): string {
   return `"${name.replaceAll('"', '""')}"`;
 }
+
+/** True if a /data or /tmp path exists inside the container. */
+export async function gisExists(containerPath: string): Promise<boolean> {
+  try {
+    await gis('test', ['-e', containerPath]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Region names are folder names and storage keys: lowercase letters, digits and dashes. */
+export const REGION_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+/** The per-region PostGIS schema the build loads into, e.g. `staging_nc_halifax`. */
+export function stagingSchema(region: string): string {
+  return `staging_${region.replaceAll('-', '_')}`;
+}
+
+/**
+ * Summarize GDAL warnings instead of printing up to 1,000 lines. The common one: a DBF
+ * column declared Integer (0 decimals) that holds decimals, e.g. Halifax RECAREANO '12.6'.
+ * GDAL truncates those values, so that column holds the truncated values.
+ */
+export function reportGdalWarnings(lines: string[]): void {
+  const truncated = new Map<string, { n: number; example: string }>();
+  const other: string[] = [];
+  for (const line of lines) {
+    const m = /Value '([^']*)' of field [^.]+\.(\S+) parsed incompletely to integer/.exec(line);
+    if (m) {
+      const t = truncated.get(m[2]!) ?? { n: 0, example: m[1]! };
+      t.n++;
+      truncated.set(m[2]!, t);
+    } else if (!/More than \d+ errors or warnings/.test(line)) {
+      other.push(line);
+    }
+  }
+  for (const [field, t] of truncated) {
+    const n = t.n >= 1000 ? '1,000+' : t.n.toLocaleString('en-US');
+    console.warn(`warning: ${field} is declared Integer but holds decimals (e.g. ${t.example}); GDAL truncated ${n} values`);
+  }
+  for (const line of other.slice(0, 10)) console.warn(line);
+  if (other.length > 10) console.warn(`… ${(other.length - 10).toLocaleString('en-US')} more GDAL messages`);
+}
+
+/** Format a count with thousands separators. */
+export function fmt(n: number): string {
+  return n.toLocaleString('en-US');
+}

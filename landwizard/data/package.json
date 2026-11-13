@@ -13,7 +13,14 @@
     "gis:down": "docker compose -f ../docker/compose.yml down",
     "gis:psql": "docker compose -f ../docker/compose.yml exec gis psql -U landwizard -d landwizard",
     "inspect": "node scripts/inspect.ts",
-    "typecheck": "tsc"
+    "fetch": "node scripts/fetch.ts",
+    "build": "node scripts/build.ts",
+    "export": "node scripts/export.ts",
+    "tiles": "node scripts/tiles.ts",
+    "publish-data": "node scripts/publish.ts",
+    "release": "node scripts/release.ts",
+    "typecheck": "tsc",
+    "test": "vitest run"
   },
   "dependencies": {
     "pg": "^8.23.1"
@@ -21,6 +28,7 @@
   "devDependencies": {
     "@types/node": "^24.19.2",
     "@types/pg": "^8.23.1",
-    "typescript": "~5.9"
+    "typescript": "~5.9",
+    "vitest": "^3.2.7"
   }
 }

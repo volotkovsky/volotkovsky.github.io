@@ -5,7 +5,7 @@
 // Runs GDAL inside the gis container; the file must be under landwizard/data.
 
 import { fail, readArgs, required } from './args.ts';
-import { dataPath, ensureGisUp, gisJson, ident, toContainer } from './gis.ts';
+import { dataPath, ensureGisUp, fmt, gisJson, ident, reportGdalWarnings, toContainer } from './gis.ts';
 
 const USAGE = 'npm run inspect -- --src <file under data/> [--layer <name>]';
 
@@ -66,7 +66,7 @@ async function layerStats(layer: OgrLayer): Promise<{ rows: number; columns: Col
   const out = await gisJson<{ features: { properties: Record<string, string | number | null> }[] }>('ogr2ogr', [
     '-f', 'GeoJSON', '/vsistdout/', containerSrc, '-dialect', 'SQLite', '-sql', query,
   ], { stderrLines: warnings });
-  reportWarnings(warnings);
+  reportGdalWarnings(warnings);
   const p = out.features[0]?.properties ?? {};
   const num = (k: string) => Number(p[k] ?? 0);
 
@@ -110,41 +110,11 @@ function printLayer(layer: OgrLayer, { rows, columns }: { rows: number; columns:
   if (nearIds.length) console.log(`nearly unique: ${nearIds.join('; ')}`);
 }
 
-/**
- * Summarize GDAL warnings instead of printing up to 1,000 lines. The common one: a DBF
- * column declared Integer (0 decimals) that holds decimals, e.g. Halifax RECAREANO '12.6'.
- * GDAL truncates those values, so that column's counts are of the truncated values.
- */
-function reportWarnings(lines: string[]): void {
-  const truncated = new Map<string, { n: number; example: string }>();
-  const other: string[] = [];
-  for (const line of lines) {
-    const m = /Value '([^']*)' of field [^.]+\.(\S+) parsed incompletely to integer/.exec(line);
-    if (m) {
-      const t = truncated.get(m[2]!) ?? { n: 0, example: m[1]! };
-      t.n++;
-      truncated.set(m[2]!, t);
-    } else if (!/More than \d+ errors or warnings/.test(line)) {
-      other.push(line);
-    }
-  }
-  for (const [field, t] of truncated) {
-    const n = t.n >= 1000 ? '1,000+' : fmt(t.n);
-    console.warn(`warning: ${field} is declared Integer but holds decimals (e.g. ${t.example}); GDAL truncated ${n} values`);
-  }
-  for (const line of other.slice(0, 10)) console.warn(line);
-  if (other.length > 10) console.warn(`… ${fmt(other.length - 10)} more GDAL messages`);
-}
-
 function note(c: ColumnStats, rows: number): string {
   if (c.filled === 0) return 'empty';
   if (c.distinct === 1) return 'constant';
   if (c.filled === rows && c.distinct === rows) return 'unique';
   return '';
-}
-
-function fmt(n: number): string {
-  return n.toLocaleString('en-US');
 }
 
 function clip(s: string, max: number): string {
